@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Экзаменатор</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+
+  
+
+  <!-- Экран выбора экзамена -->
+  <div id="roleSelection">
+    <h2>Выберите экзамен</h2>
+    <button id="btn-advocate" onclick="startTest('advocate')">Адвокат</button>
+    <button id="btn-senior" onclick="startTest('senior_advocate')">Старший адвокат</button>
+    <button id="btn-zpka" onclick="startTest('zpka')">ЗПК</button>
+    <button id="btn-zpka" onclick="window.location.href='manage_questions.html'">Управление вопросами</button>
+  </div>
+
+  <!-- Экран экзамена -->
+  <div id="examPanel" class="hidden">
+    <h2>Экзамен</h2>
+    <form id="examForm">
+      <div id="examinerInfo">
+        <label for="examineeName"></label>
+        <input type="text" id="examineeName" placeholder="Введите Discord ID экзаминуемого" required>
+  
+        <label for="examinerName"></label>
+        <input type="text" id="examinerName" placeholder="Введите Discord ID экзаменатора" required>
+      </div>
+      <div id="questions"></div>
+    </form>
+    <button id="submitBtn">Завершить</button>
+    <div id="result"></div>
+  </div>
+
+  <footer>© 2025 Экзаменатор</footer>
+  <script src="script.js"></script>
+  <script>
+    fetch('/me', { credentials: 'include' })
+     .then(res => res.json())
+     .then(data => {
+       if (!data.authenticated) {
+        window.location.href = '/'; // пользователь не авторизован — редирект на главную
+        }
+    });
+
+  </script>
+</body>
+</html>

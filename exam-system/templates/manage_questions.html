@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Панель управления вопросами</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .manage-container {
+      background-color: #292929;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 900px;
+      margin: 40px auto;
+      text-align: left;
+      transition: box-shadow 0.3s;
+    }
+    .manage-container:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .manage-form-row {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .manage-form-row label {
+      width: 120px;
+      color: #fefefe;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .manage-form-row input,
+    .manage-form-row select,
+    .manage-form-row textarea {
+      background-color: #3a3a3a;
+      color: #ffffff;
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 15px;
+      width: 100%;
+      max-width: 400px;
+      margin-left: 0;
+      margin-bottom: 0;
+      transition: border 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .manage-form-row input:focus,
+    .manage-form-row select:focus,
+    .manage-form-row textarea:focus {
+      border: 1.5px solid #888;
+      box-shadow: 0 0 0 2px #232323;
+    }
+    .manage-form-row textarea {
+      min-height: 48px;
+      resize: vertical;
+    }
+    .manage-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+      background: #232323;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 15px;
+    }
+    .manage-table th, .manage-table td {
+      border: 1px solid #444;
+      padding: 12px 10px;
+      color: #fefefe;
+      vertical-align: top;
+    }
+    .manage-table th {
+      background: #1c1c1c;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .manage-table tr:nth-child(even) {
+      background: #292929;
+    }
+    .manage-table tr:nth-child(odd) {
+      background: #232323;
+    }
+    .actions button {
+      background-color: #3f3f3f;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      margin-right: 6px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .actions button:hover {
+      background-color: #5a5a5a;
+      transform: translateY(-2px) scale(1.04);
+    }
+    .manage-table input[type="text"],
+    .manage-table input[type="number"] {
+      background: #2f2f2f;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px 10px;
+      width: 98%;
+      font-size: 15px;
+      min-width: 120px;
+      box-sizing: border-box;
+      margin: 0;
+      display: block;
+    }
+    .manage-table input[type="text"]:focus,
+    .manage-table input[type="number"]:focus {
+      border: 1.5px solid #888;
+      background: #232323;
+    }
+    .manage-table textarea {
+      background: #2f2f2f;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px 10px;
+      width: 98%;
+      font-size: 15px;
+      min-height: 40px;
+      resize: vertical;
+      box-sizing: border-box;
+      margin: 0;
+      display: block;
+    }
+    .manage-table textarea:focus {
+      border: 1.5px solid #888;
+      background: #232323;
+    }
+    .manage-table .actions {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .manage-table .actions button {
+      margin: 0;
+      padding: 8px 14px;
+      min-width: 90px;
+    }
+    @media (max-width: 900px) {
+      .manage-container { padding: 10px; }
+      .manage-form-row label { width: 80px; }
+      .manage-form-row input, .manage-form-row select, .manage-form-row textarea { max-width: 200px; }
+      .manage-table th, .manage-table td { font-size: 13px; padding: 8px 4px; }
+    }
+    @media (max-width: 600px) {
+      .manage-container { padding: 2px; }
+      .manage-form-row { flex-direction: column; align-items: stretch; }
+      .manage-form-row label { width: 100%; margin-bottom: 4px; }
+      .manage-form-row input, .manage-form-row select, .manage-form-row textarea { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="manage-container">
+    <h1>Панель управления вопросами</h1>
+    <form id="addForm">
+      <div class="manage-form-row">
+        <label>Тип:</label>
+        <select id="type">
+          <option value="advocate">Адвокат</option>
+          <option value="senior_advocate">Старший адвокат</option>
+          <option value="zpka">ЗПКA</option>
+        </select>
+      </div>
+      <div class="manage-form-row">
+        <label>Вопрос:</label>
+        <input type="text" id="text" required />
+      </div>
+      <div class="manage-form-row">
+        <label>Баллы:</label>
+        <input type="number" id="points" min="1" max="3" required />
+      </div>
+      <div class="manage-form-row">
+        <label>Пояснение:</label>
+        <textarea id="explanation" required></textarea>
+      </div>
+      <button type="submit">Добавить вопрос</button>
+    </form>
+
+    <h2>Список вопросов</h2>
+    <table class="manage-table" id="questionsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Тип</th>
+          <th>Вопрос</th>
+          <th>Баллы</th>
+          <th>Пояснение</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script>
+    async function fetchQuestions() {
+      const res = await fetch('/api/all_questions');
+      const data = await res.json();
+      const tbody = document.querySelector('#questionsTable tbody');
+      tbody.innerHTML = '';
+      data.forEach(q => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${q.id}</td>
+          <td>${q.test_type}</td>
+          <td>${q.text}</td>
+          <td>${q.points}</td>
+          <td>${q.explanation}</td>
+          <td class="actions">
+            <button onclick="deleteQuestion(${q.id})">Удалить</button>
+            <button onclick="editQuestion(${q.id})">Редактировать</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('addForm').onsubmit = async e => {
+      e.preventDefault();
+      const body = {
+        test_type: document.getElementById('type').value,
+        text: document.getElementById('text').value,
+        points: +document.getElementById('points').value,
+        explanation: document.getElementById('explanation').value
+      };
+      await fetch('/api/add_question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      e.target.reset();
+      fetchQuestions();
+    };
+
+    async function deleteQuestion(id) {
+      if (!confirm('Удалить вопрос?')) return;
+      await fetch(`/api/delete_question/${id}`, { method: 'DELETE' });
+      fetchQuestions();
+    }
+
+    window.editQuestion = function(id) {
+      const tr = [...document.querySelectorAll('#questionsTable tbody tr')].find(row => +row.children[0].textContent === id);
+      if (!tr) return;
+      const [idCell, typeCell, textCell, pointsCell, explanationCell] = tr.children;
+      textCell.innerHTML = `<textarea id="editText${id}" style="width:98%">${textCell.textContent}</textarea>`;
+      pointsCell.innerHTML = `<input type="number" min="1" max="3" value="${pointsCell.textContent}" id="editPoints${id}" style="width:98%">`;
+      explanationCell.innerHTML = `<textarea id="editExplanation${id}" style="width:98%">${explanationCell.textContent}</textarea>`;
+      tr.querySelector('.actions').innerHTML = `<button onclick="saveEdit(${id})">Сохранить</button> <button onclick="fetchQuestions()">Отмена</button>`;
+      setTimeout(() => { document.getElementById('editText'+id).focus(); }, 0);
+    };
+
+    window.saveEdit = async function(id) {
+      const text = document.getElementById('editText'+id).value;
+      const points = +document.getElementById('editPoints'+id).value;
+      const explanation = document.getElementById('editExplanation'+id).value;
+      await fetch(`/api/edit_question/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, points, explanation })
+      });
+      fetchQuestions();
+    };
+
+    fetchQuestions();
+  </script>
+</body>
+</html>

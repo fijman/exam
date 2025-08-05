@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Вход через Discord</title>
+<style>
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  button {
+    background: #5865F2;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <button id="loginBtn">Войти через Discord</button>
+
+<script>
+  async function checkAuth() {
+    try {
+      const res = await fetch('/me', { credentials: 'include' });
+      if (!res.ok) throw new Error('Ошибка сети');
+      const data = await res.json();
+      if (data.authenticated) {
+        // Уже авторизован — перейти к экзамену
+        window.location.href = 'exam.html';
+      }
+    } catch {
+      // Ошибка или не авторизован — остаёмся здесь
+    }
+  }
+
+  checkAuth();
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    // Редирект на backend /login, который отправит на Discord OAuth2
+    window.location.href = '/login';
+  });
+
+  // index.html или script.js
+function redirectToExam() {
+  sessionStorage.setItem('from_index', 'true');
+  window.location.href = '/exam';
+}
+
+</script>
+</body>
+</html>
